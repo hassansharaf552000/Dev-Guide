@@ -16,88 +16,31 @@ export class LoginComponent implements OnInit {
   successMessage: string = '';  // Success message for login successes
   passwordVisible: boolean = false;
   form:FormGroup;
-   returnUrl='/home'
+  returnUrl='/home'
   constructor(private authService: AuthService, private router: Router,private builder:FormBuilder) { 
     this.form = this.builder.group({
       LoginMethod: ["", [Validators.required]],
       Password: ["", [Validators.required, Validators.pattern(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/)]],})
-
-
-
-    const storedLogin = localStorage.getItem('login');
-    const storedPassword = localStorage.getItem('password');
-    if (storedLogin && storedPassword) {
-      this.loginMethod = storedLogin;
-      this.password = storedPassword;
-      this.rememberMe = true;  
-    }
    }
-
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-  }
   ngOnInit(): void {
-    // Check if localStorage is available in the current environment
-    if (this.isBrowser()) {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        // Handle logged-in state, e.g., redirect or load user data
-      }
-    }
+
   }
   
-  
-    // Check if credentials are stored in localStorage
-    
+
   
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;  // Toggle the visibility
   }
 
 
-//   login() {
-//     this.authService.login(this.loginMethod, this.password).subscribe({
-//       next: (response) => {
-//         if (response && response.token) {
-//           console.log('Login successful:', response);
-
-//           // Handle "Remember Me" functionality
-//           if (this.rememberMe) {
-//             localStorage.setItem('login', this.loginMethod);
-//             localStorage.setItem('password', this.password);
-//           } else {
-//             localStorage.removeItem('login');
-//             localStorage.removeItem('password');
-//           }
-
-//           this.successMessage = 'Login successful! Redirecting to the home page...';
-//           this.errorMessage = '';
-//           setTimeout(() => {
-//             this.router.navigate(['/home']);
-//           }, 1500);
-//         }
-//       },
-//       error: (errorMessage) => {
-//         console.error('Login failed:', errorMessage);
-//         this.errorMessage = errorMessage;  // Display the error message
-//         this.successMessage = '';
-//       }
-//     });
-//   }
-
-// }
-
 login() {
-  console.log(this.form.value);
-  
-  
+ 
   this.authService.login(this.form.value).subscribe({
     next:(res:any)=>{
-      console.log(res);
+      console.log(res.Result);
       
-      if(res.success == true){
-        this.authService.userlogin(res.result);
+      if(res.Success == true){
+        this.authService.userlogin(res.Result);
         this.router.navigateByUrl(this.returnUrl)
 
       }else{

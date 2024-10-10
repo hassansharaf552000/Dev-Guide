@@ -1,7 +1,7 @@
-@if(isLoading|async){
+<app-spinner *ngIf="isLoading"></app-spinner>
 
-  <app-spinner></app-spinner>
-}@else{
+<div [ngClass]="{'d-none':isLoading}">
 
-  <router-outlet></router-outlet>
-}
+  <router-outlet ></router-outlet>
+</div>
+

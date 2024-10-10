@@ -1,29 +1,39 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../../../shared/services/Account/account.service';
-import { log } from 'console';
 
 @Component({
   selector: 'app-step-one',
   templateUrl: './step-one.component.html',
-  styleUrl: './step-one.component.css',
+  styleUrls: ['./step-one.component.css'],
 })
 export class StepOneComponent {
-  constructor(private router: Router,private Account:AccountService) {}
-  CVFile: File|null = null;
+  CVFile: File | null = null;
+  isValidationVisible: boolean = false; // Flag for validation message visibility
 
-  goToNextStep() {
-    if(this.CVFile!= null){
-      this.Account.updateFormData('CV', this.CVFile);
-      this.router.navigate(['/developer/step-two']);
-    }
+  constructor(private router: Router, private Account: AccountService) {}
 
-  }
-  SelectFile(event:any){
+  // Called when user selects a file
+  SelectFile(event: any) {
     const file = event.target.files[0];
     this.CVFile = file;
 
-    console.log(this.CVFile);
+    if (file) {
+      this.isValidationVisible = false; // Hide validation if a file is selected
+    }
 
+    console.log(this.CVFile);
+  }
+
+  // Called when user submits the form
+  goToNextStep() {
+    if (this.CVFile) {
+      this.isValidationVisible = false; // Hide validation message
+      this.Account.updateFormData('CV', this.CVFile);
+      this.router.navigate(['/developer/step-two']); // Navigate to step two
+    } else {
+      this.isValidationVisible = true; // Show validation message if no file is selected
+    }
   }
 }
+

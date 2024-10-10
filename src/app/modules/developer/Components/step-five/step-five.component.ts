@@ -1,49 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccountService } from '../../../../shared/services/Account/account.service';
+import { Profile } from '../../interfaces/Profile';
 
 @Component({
   selector: 'app-step-five',
   templateUrl: './step-five.component.html',
   styleUrl: './step-five.component.css',
 })
-export class StepFiveComponent implements OnInit {
-  basicInfo: any;
-  education: any;
-  technicalSkills: any;
-
-  constructor(private router: Router, private accountService: AccountService) {}
-
-  ngOnInit(): void {
+export class StepFiveComponent {
+  Country: any
+  Level: any
+  YearsOfExperience: any
+  About: any
+  Title: any
+  PhoneNumber: any
+  Image: any
+  CV: any
+  constructor(private router: Router, public accountService: AccountService) {
     // Subscribe to the BehaviorSubject to get the form data from previous steps
     const formData = this.accountService.getFormData();
 
     // Extract data from formData and assign it to variables for rendering in the template
-    this.basicInfo = {
-      firstName: formData.get('firstName') || 'John',
-      lastName: formData.get('lastName') || 'Doe',
-      country: formData.get('country') || 'USA',
-      city: formData.get('city') || 'New York',
-      phone: formData.get('phone') || '1234567890',
-    };
 
-    this.education = {
-      university: formData.get('university') || 'Harvard University',
-      country: formData.get('educationCountry') || 'USA',
-      degree: formData.get('degree') || 'Bachelor',
-      fieldOfStudy: formData.get('fieldOfStudy') || 'Computer Science',
-      startYear: formData.get('startYear') || '2015',
-      startMonth: formData.get('startMonth') || 'September',
-      endYear: formData.get('endYear') || '2019',
-      endMonth: formData.get('endMonth') || 'June',
-      currentlyStudying: formData.get('currentlyStudying') || false,
-    };
-
-    this.technicalSkills = {
-      experience: formData.get('experience') || 5,
-      role: formData.get('role') || 'Developer',
-      skills: formData.get('skills') || ['Angular', 'React', 'Node.js'],
-    };
+    this.CV = formData.get('CV')
+    this.Image = formData.get('Image')
+    this.Country = formData.get('Country')
+    this.Title = formData.get('Title')
+    this.About = formData.get('About')
+    this.Level = formData.get('Level')
+    this.YearsOfExperience = formData.get('YearsOfExperience')
+    this.PhoneNumber = formData.get('PhoneNumber')
   }
 
   editSection(step: string): void {
@@ -55,26 +42,37 @@ export class StepFiveComponent implements OnInit {
   }
 
   submitProfile(): void {
-    // Handle form submission
-    console.log('Profile submitted:', {
-      basicInfo: this.basicInfo,
-      education: this.education,
-      technicalSkills: this.technicalSkills,
-    });
-
     // Send form data to the server via the AccountService
-    this.accountService.CompleteProfile().subscribe(
-      (res:any)=>{
-        console.log(res);
+    this.accountService.CompleteProfile().subscribe({
+      next: (res: any) => {
+        console.log("CompleteProfile", res);
 
-        if(res.success == true){
-          this.router.navigate(['/']);
-        }
+        this.accountService.Educations.forEach(newEducation=>{
+          this.accountService.AddEducation(newEducation).subscribe({
+            next:(edres)=>{
+              console.log(edres);
+            },
+            error:(edres)=>{
+              console.log(edres);
+            }
+          })
+        })
+        this.accountService.Experiences.forEach(newExperience=>{
+          this.accountService.AddExperience(newExperience).subscribe({
+            next:(edres)=>{
+              console.log(edres);
+            },
+            error:(edres)=>{
+              console.log(edres);
+            }
+          })
+        })
       },
-      (err)=>{
+      error: (err) => {
         console.log(err);
         alert("Sorry try again leter")
       }
+    }
     );
   }
 }

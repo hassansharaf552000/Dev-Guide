@@ -10,35 +10,49 @@
           </p>
           <div class="info-section">
             <h4>Basic Information</h4>
-            <p>First name: {{ basicInfo.firstName || 'N/A' }}</p>
-            <p>Last name: {{ basicInfo.lastName || 'N/A' }}</p>
-            <p>Country of residence: {{ basicInfo.country || 'N/A' }}</p>
-            <p>City of residence: {{ basicInfo.city || 'N/A' }}</p>
-            <p>Phone number: {{ basicInfo.phone || 'N/A' }}</p>
+            <p>Country of residence: {{Country || 'N/A' }}</p>
+            <p>Phone number: {{ PhoneNumber || 'N/A' }}</p>
             <button class="btn btn-link" (click)="editSection('/developer/step-two')">Edit Information</button>
           </div>
           <hr>
           <div class="info-section">
             <h4>Education</h4>
-            <p>University / School: {{ education.university || 'N/A' }}</p>
-            <p>Country: {{ education.country || 'N/A' }}</p>
-            <p>Degree: {{ education.degree || 'N/A' }}</p>
-            <p>Field of study: {{ education.fieldOfStudy || 'N/A' }}</p>
-            <p>Start Date: {{ education.startYear || 'N/A' }} {{ education.startMonth || '' }}</p>
-            <p>End Date: {{ education.endYear || 'N/A' }} {{ education.endMonth || '' }}</p>
-            <p>Currently studying: {{ education.currentlyStudying ? 'Yes' : 'No' }}</p>
+            @for (Education of accountService.Educations; track $index) {
+
+              <p>University / School: {{ Education.University || 'N/A' }}</p>
+              <p>Faculty: {{ Education.Faculty || 'N/A' }}</p>
+              <p>Country: {{ Education.CountryOfStudy || 'N/A' }}</p>
+              <p>Field of study: {{ Education.FieldOfStudy || 'N/A' }}</p>
+              <p>Degree: {{ Education.Degree || 'N/A' }}</p>
+              <p>Duration of Study: {{ Education.StartDate || 'N/A' }} {{ Education.EndDate || '' }}</p>
+              <p>Currently studying: {{ Education.TillNow ? 'Yes' : 'No' }}</p>
+            }
             <button class="btn btn-link" (click)="editSection('/developer/step-three')">Edit Information</button>
           </div>
           <hr>
           <div class="info-section">
             <h4>Technical Skills</h4>
-            <p>Years of full-time work experience: {{ technicalSkills.experience || 'N/A' }}</p>
-            <p>Preferred role: {{ technicalSkills.role || 'N/A' }}</p>
-            <p>Skills: {{ technicalSkills.skills.join(', ') || 'N/A' }}</p>
+            <p>Years of full-time work experience: {{ YearsOfExperience || 'N/A' }}</p>
+            <p>Title: {{ Title || 'N/A' }}</p>
+            <p>About: {{ About || 'N/A' }}</p>
+            <p>Level: {{ Level || 'N/A' }}</p>
+            <p>Skills: 
+              @for (item of accountService.skills; track $index) {
+                <span>{{item.Name}}</span>
+              }
+            </p>
+            <h4>Experience</h4>
+            @for (Exp of accountService.Experiences; track $index) {
+
+              <p>Organization: {{ Exp.Organization || 'N/A' }}</p>
+              <p>Field of study: {{ Exp.FieldOfStudy || 'N/A' }}</p>
+              <p>Duration of Study: {{ Exp.StartDate || 'N/A' }} {{ Exp.EndDate || '' }}</p>
+              <p>Currently studying: {{ Exp.TillNow ? 'Yes' : 'No' }}</p>
+            }
             <button class="btn btn-link" (click)="editSection('/developer/step-four')">Edit Information</button>
           </div>
           <button class="btn btn-secondary mt-3 ms-3" (click)="goToPreviousStep()">Back</button>
-          <button class="btn btn-primary mt-3 ms-3" (click)="submitProfile()" routerLink="/home">Submit Profile</button>
+          <button class="btn btn-primary mt-3 ms-3" (click)="submitProfile()">Submit Profile</button>
         </div>
       </div>
     </div>

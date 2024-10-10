@@ -9,9 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'finalproject';
-  isLoading: BehaviorSubject<boolean>
+  isLoading: boolean = false
 
-  constructor(private loaderServ: LoaderService){
-    this.isLoading = loaderServ.isLoading;
+  constructor(loaderServ: LoaderService){
+    loaderServ.isLoading.subscribe(val=>{
+      this.isLoading = val
+    });
   }
 }

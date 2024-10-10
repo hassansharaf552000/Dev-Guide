@@ -1,112 +1,129 @@
- <div class="container mt-5">
+<div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-12">
       <div class="card custom-card">
         <div class="card-body">
           <h3 class="card-title">Technical skills</h3>
-          <form >
-            <div class="form-group">
-              <label for="experience">Years of work experience</label>
-              <input type="number" name="experience" class="form-control" [(ngModel)]="YearsOfExperience">
-              <div *ngIf="YearsOfExperience<0" class="text-danger">
-                Experience is required.
+          <form>
+              <div class="form-group">
+                <label for="experience">Years of work experience</label>
+                <input type="number" name="experience" class="form-control" [(ngModel)]="YearsOfExperience">
+                <div *ngIf="YearsOfExperience<0" class="text-danger">
+                  Experience is required.
+                </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label for="level">Level</label>
-              <input type="text" name="level" class="form-control" [(ngModel)]="Level">
-              <div *ngIf="Level==''" class="text-danger">
-                Level is required.
+              <div class="form-group">
+                <label for="level">Level</label>
+                <input type="text" name="level" class="form-control" [(ngModel)]="Level">
+                <div *ngIf="Level==''" class="text-danger">
+                  Level is required.
+                </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label for="about">Give me Overiew about You</label>
-              <textarea  name="about" class="form-control" [(ngModel)]="About"></textarea>
-              <div *ngIf="About==''" class="text-danger">
-                About is required.
+              <div class="form-group">
+                <label for="about">Give me Overiew about You</label>
+                <textarea name="about" class="form-control" [(ngModel)]="About"></textarea>
+                <div *ngIf="About==''" class="text-danger">
+                  About is required.
+                </div>
               </div>
-            </div>
+              <div class="form-group">
 
-            <div class="skill-selector">
-              <div class="selected-skills">
-                <span class="skill-tag" *ngFor="let skill of SelectedSkilles; let i = index">
-                  {{skill.value}}
-                  <span class="remove-skill" (click)="removeSkill(skill.value)">&#10005;</span>
-                </span>
+                <label for="title">Job Title</label>
+                <textarea name="title" class="form-control" [(ngModel)]="Title"></textarea>
+                <div *ngIf="Title==''" class="text-danger">
+                  Title is required.
+                </div>
+              </div>
+              <div class="skill-selector">
+                <div class="selected-skills">
+                  <span class="skill-tag" *ngFor="let skill of SelectedSkilles; let i = index">
+                    {{skill.Name}}
+                    <span class="remove-skill" (click)="removeSkill(skill)">&#10005;</span>
+                  </span>
+                </div>
+
+                <input name="search" type="search" #searchInput (input)="onSearchInputChange(searchInput.value)"
+                  [value]="searchQuery" class="form-control form-control-sm" placeholder="Search skills..." />
+
+                <h6>Suggested Skills</h6>
+                <div class="suggested-skills">
+                  <span class="skill-suggestion" *ngFor="let skill of filteredSkills"
+                    (click)="addSkillFromSuggestion(skill)">
+                    {{skill.Name}}
+                  </span>
+                </div>
               </div>
 
-              <input name="search" type="search" #searchInput (input)="onSearchInputChange(searchInput.value)"
-              [value]="searchQuery" class="form-control form-control-sm" placeholder="Search skills..." />
-
-              <h6>Suggested Skills</h6>
-              <div class="suggested-skills">
-                <span class="skill-suggestion" *ngFor="let skill of filteredSkills" (click)="addSkillFromSuggestion(skill)">
-                  {{skill}}
-                </span>
+              <div *ngIf="SelectedSkilles.length<1" class="text-danger">
+                Please select at least one skill.
               </div>
-            </div>
 
-            <div *ngIf="SelectedSkilles.length<1" class="text-danger">
-              Please select at least one skill.
-            </div>
-
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card-body">
-                  <h3 class="card-title">Experience</h3>
-                  <div>
-                    <div *ngFor="let exp of Experiencees; let i = index" class="mb-3">
-                      <div class="form-group">
-                        <label for="organization-{{i}}">Organization </label>
-                        <input name="organization-{{i}}" type="text" class="form-control" [(ngModel)]="Experiencees[i].Organization" placeholder="Organization">
-                        <div *ngIf="Experiencees[i].Organization==''" class="text-danger">
-                          Organization is required
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card-body">
+                    <h3 class="card-title">Experience</h3>
+                    <div>
+                      <div *ngFor="let exp of Experiences; let i = index" class="mb-3">
+              <button type="button" (click)="removeExperience(i)" class="btn btn-danger">X</button>
+                        <div class="form-group">
+                          <label for="organization-{{i}}">Organization </label>
+                          <input name="organization-{{i}}" type="text" class="form-control"
+                            [(ngModel)]="Experiences[i].Organization" placeholder="Organization">
+                          <div *ngIf="Experiences[i].Organization==''" class="text-danger">
+                            Organization is required
+                          </div>
                         </div>
-                      </div>
 
-                      <div class="form-group">
-                        <label for="field-{{i}}">Field</label>
-                        <input name="field-{{i}}" type="text" class="form-control" [(ngModel)]="Experiencees[i].FieldOfStudy" placeholder="CS">
-                        <div *ngIf="Experiencees[i].Organization==''" class="text-danger">
-                          Field is required
+                        <div class="form-group">
+                          <label for="field-{{i}}">Field</label>
+                          <input name="field-{{i}}" type="text" class="form-control"
+                            [(ngModel)]="Experiences[i].FieldOfStudy" placeholder="CS">
+                          <div *ngIf="Experiences[i].Organization==''" class="text-danger">
+                            Field is required
+                          </div>
                         </div>
-                      </div>
 
-                      <div class="form-group">
-                        <label for="startDate-{{i}}">Start Date</label>
-                        <input name="startDate-{{i}}" type="date" class="form-control" [(ngModel)]="Experiencees[i].StartDate">
-                        <div *ngIf="Experiencees[i].StartDate.toString()==''" class="text-danger">
-                          Start date is required
+                        <div class="form-group">
+                          <label for="startDate-{{i}}">Start Date</label>
+                          <input name="startDate-{{i}}" type="date" class="form-control"
+                            [(ngModel)]="Experiences[i].StartDate">
+                          <div *ngIf="Experiences[i].StartDate.toString()==''" class="text-danger">
+                            Start date is required
+                          </div>
                         </div>
-                      </div>
 
-                      <div class="form-group">
-                        <label for="endDate-{{i}}">End Date</label>
-                        <input name="endDate-{{i}}" type="date" class="form-control"[(ngModel)]="Experiencees[i].EndDate">
-                        <div *ngIf="Experiencees[i].EndDate?.toString()" class="text-danger">
-                          End date is required
+                        <div class="form-group">
+                          <label for="endDate-{{i}}">End Date</label>
+                          <input name="endDate-{{i}}" type="date" class="form-control"
+                            [(ngModel)]="Experiences[i].EndDate">
+                          <!-- <div *ngIf="Experiences[i].EndDate?.toString()" class="text-danger">
+                            End date is required
+                          </div> -->
                         </div>
-                      </div>
 
-                      <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="tillnow-{{i}}" [(ngModel)]="Experiencees[i].TillNow">
-                        <label class="form-check-label" for="tillnow-{{i}}">Till Now</label>
-                      </div>
+                        <div class="form-group form-check">
+                          <input type="checkbox" class="form-check-input" name="tillnow-{{i}}"
+                            [(ngModel)]="Experiences[i].TillNow">
+                          <label class="form-check-label" for="tillnow-{{i}}">Till Now</label>
+                        </div>
 
-                      <hr />
+                        <hr />
+                      </div>
                     </div>
                   </div>
 
-                  <button type="button" class="btn btn-primary mt-3 me-3 col-6" (click)="addExperience()" title="Click to add another experience entry">+</button>
                 </div>
               </div>
-            </div>
+           
+            <button type="button" class="btn btn-primary mt-3 me-3 col-6" (click)="addExperience()"
+              title="Click to add another experience entry">+</button>
 
-            <button type="button" class="btn btn-secondary mt-3" (click)="goToPreviousStep()">Back</button>
-            <button type="submit" class="btn btn-primary mt-3 ms-3" [disabled]="">Next</button>
           </form>
         </div>
       </div>
+      <!-- <button (click)="testbehvior()">testtttt</button> -->
+      <button type="button" class="btn btn-secondary mt-3" (click)="goToPreviousStep()">Back</button>
+      <button type="submit" class="btn btn-primary mt-3 ms-3"(click)="onNext()" [disabled]="">Next</button>
     </div>
   </div>
 </div>

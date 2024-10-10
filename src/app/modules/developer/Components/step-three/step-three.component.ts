@@ -281,22 +281,11 @@ export class StepThreeComponent {
   }
   onNext(): void {
     if (this.educationslist.length > 0 && this.checklist() == undefined) {
-      this.educationslist.forEach(i => {
-        this.Account.updateFormData("Education", JSON.stringify(i));
-
-        // this.Account.updateFormData("StartDate", i.StartDate);
-        // this.Account.updateFormData("EndDate", i.EndDate);
-        // this.Account.updateFormData("CountryOfStudy", i.CountryOfStudy);
-        // this.Account.updateFormData("University", i.University);
-        // this.Account.updateFormData("Faculty", i.Faculty);
-        // this.Account.updateFormData("Degree", i.Degree);
-        // this.Account.updateFormData("FieldOfStudy", i.FieldOfStudy);
-        // this.Account.updateFormData("TillNow", i.TillNow);
-      })
+      this.Account.Educations = this.educationslist;
       this.router.navigate(['/developer/step-four']);
     }
     else {
-console.log("error Happaned");
+      console.log("error Happaned");
 
     }
   }
@@ -304,9 +293,9 @@ console.log("error Happaned");
   goToPreviousStep(): void {
     this.router.navigate(['/developer/step-two']);
   }
-  checklist(): EducationViewModel|undefined{
+  checklist(): EducationViewModel | undefined {
     console.log(this.educationslist);
-    let res=  this.educationslist.find(i => i.CountryOfStudy == "" || i.Degree == "" || i.Faculty == "" || i.FieldOfStudy == "" || i.University == "")
+    let res = this.educationslist.find(i => i.CountryOfStudy == "" || i.Degree == "" || i.Faculty == "" || i.FieldOfStudy == "" || i.University == "")
     return res;
   }
 }
